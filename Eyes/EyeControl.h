@@ -21,21 +21,34 @@ class EyeControl
     Servo rightEyeTilt;
     Servo rightEyePan;
     Servo eyelidsTilt;
-    Servo eyelidsOpennes;
+    Servo eyelidsOpenness;
 
-    uint16_t leftEyeTiltOldValue = 0;
-    uint16_t leftEyePanOldValue = 0;
-    uint16_t rightEyeTiltOldValue = 0;
-    uint16_t rightEyePanOldValue = 0;
-    uint16_t eyelidsTiltOldValue = 0;
-    uint16_t eyelidsOpennesOldValue = 0;
+    uint16_t* leftEyeTiltOldValue;
+    uint16_t* leftEyePanOldValue;
+    uint16_t* rightEyeTiltOldValue;
+    uint16_t* rightEyePanOldValue;
+    uint16_t* eyelidsTiltOldValue;
+    uint16_t* eyelidsOpennessOldValue;
 
     bool EvaluateServoInputValie(uint16_t degrees);
     void MoveServo(uint16_t value, Servo servo);
-    uint16_t SmoothMotion(uint16_t oldValue, uint16_t newValue);
 
   public:
 
+    uint16_t getLeftEyeTiltOldValue();
+    uint16_t* getLeftEyePanOldValue();
+    uint16_t getRightEyeTiltOldValue();
+    uint16_t getRightEyePanOldValue();
+    uint16_t getEyelidsTiltOldValue();
+    uint16_t getEyelidsOpennessOldValue();
+
+    void setLeftEyeTiltOldValue(uint16_t value);
+    void setLeftEyePanOldValue(uint16_t value);
+    void setRightEyeTiltOldValue(uint16_t value);
+    void setRightEyePanOldValue(uint16_t value);
+    void setEyelidsTiltOldValue(uint16_t value);
+    void setEyelidsOpennessOldValue(uint16_t value);
+    
     void init(ServoConfig* servoConfig);
 
     void SetupServos();
@@ -46,4 +59,5 @@ class EyeControl
     int8_t PanRightEye(uint16_t degrees);
     int8_t TiltEyelids(uint16_t degrees);
     int8_t ChangeEyeOpenness(uint16_t degrees);
+    uint16_t SmoothMotion(uint16_t* oldValue, uint16_t newValue);
 };

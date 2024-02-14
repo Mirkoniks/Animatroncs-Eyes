@@ -4,6 +4,7 @@
 class SerialCommunication
 {
   public:
-    SendData();
-    RecieveData();
+    void SetupCommunication();
+    void SendData(byte data);
+    byte ReceiveData();
 };

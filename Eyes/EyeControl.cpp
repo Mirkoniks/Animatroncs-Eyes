@@ -1,8 +1,80 @@
 #include "EyeControl.h"
 
+uint16_t EyeControl::getLeftEyeTiltOldValue()
+{
+  uint16_t* value = this->leftEyeTiltOldValue;
+  return *value;
+}
+
+uint16_t* EyeControl::getLeftEyePanOldValue()
+{
+  uint16_t* value = this->leftEyePanOldValue;
+  return value;
+}
+
+uint16_t EyeControl::getRightEyeTiltOldValue()
+{
+  uint16_t* value = this->rightEyeTiltOldValue;
+  return *value;
+}
+
+uint16_t EyeControl::getRightEyePanOldValue()
+{
+  uint16_t* value = this->rightEyePanOldValue;
+  return *value;  
+}
+
+uint16_t EyeControl::getEyelidsTiltOldValue()
+{
+  uint16_t* value = this->eyelidsTiltOldValue;
+  return *value;
+}
+
+uint16_t EyeControl::getEyelidsOpennessOldValue()
+{
+  uint16_t* value = this->eyelidsOpennessOldValue;
+  return *value;
+}
+
+void EyeControl::setLeftEyeTiltOldValue(uint16_t value)
+{
+  *leftEyeTiltOldValue = value;
+}
+
+void EyeControl::setLeftEyePanOldValue(uint16_t value)
+{
+  *leftEyePanOldValue = value;
+}
+
+void EyeControl::setRightEyeTiltOldValue(uint16_t value)
+{
+  *rightEyeTiltOldValue = value;
+}
+
+void EyeControl::setRightEyePanOldValue(uint16_t value)
+{
+  *rightEyePanOldValue = value;
+}
+
+void EyeControl::setEyelidsTiltOldValue(uint16_t value)
+{ 
+  *eyelidsTiltOldValue = value;
+}
+
+void EyeControl::setEyelidsOpennessOldValue(uint16_t value)
+{
+  *eyelidsOpennessOldValue = value;
+}
+
 void EyeControl::init(ServoConfig* servoConfig)
 {
   this->servoConfig = *servoConfig;
+  *eyelidsTiltOldValue = DEFAULT_VALUE;
+  *leftEyeTiltOldValue = DEFAULT_VALUE;
+  *leftEyePanOldValue = DEFAULT_VALUE;
+  *rightEyeTiltOldValue = DEFAULT_VALUE;
+  *rightEyePanOldValue = DEFAULT_VALUE;
+  *eyelidsOpennessOldValue = DEFAULT_VALUE;
 }
 
 void EyeControl::SetupServos()
@@ -12,7 +84,7 @@ void EyeControl::SetupServos()
   rightEyeTilt.attach(servoConfig.RightEyeTiltPin);
   rightEyePan.attach(servoConfig.RightEyePanPin);
   eyelidsTilt.attach(servoConfig.EyelidsTiltPin);
-  eyelidsOpennes.attach(servoConfig.EyelidsOpennessPin);
+  eyelidsOpenness.attach(servoConfig.EyelidsOpennessPin);
   
   #if WRITE_DEFAULT_POSITON_ON_POWER_ON == 1
 
@@ -75,7 +147,7 @@ int8_t EyeControl::ChangeEyeOpenness(uint16_t value)
 {
   if(EvaluateServoInputValie(value))
   {
-    MoveServo(value,eyelidsOpennes);
+    MoveServo(value,eyelidsOpenness);
     return value;
   }
   return -1;
@@ -100,12 +172,11 @@ void EyeControl::MoveServo(uint16_t value, Servo servo)
   servo.writeMicroseconds(value);
 }
 
-uint16_t EyeControl::SmoothMotion(uint16_t oldValue, uint16_t newValue)
+uint16_t EyeControl::SmoothMotion(uint16_t* oldValue, uint16_t newValue)
 {
-    // uint16_t switch1Smoothed = (newValue * 0.05) + (switch1Smoothed * 0.95);
+    uint16_t smoothed = (newValue * SMOOTHING_CONSTANT) + (smoothed * SMOOTHING_CONSTANT_OLD_VALUE);
 
-    // switch1Prev = switch1Smoothed;
+    *oldValue = smoothed;
 
-    // return switch1Smoothed;
-    return 1;
+    return smoothed;
 }

@@ -13,6 +13,8 @@ ServoConfig config =
 
 EyeControl eyeControl;
 
+int number;
+
 void setup() 
 {
   eyeControl.init(&config);
@@ -21,21 +23,38 @@ void setup()
   Serial.begin(9600); 
 }
 
+int oldValue = 1500;
+int smooth = 1500;
+
 void loop() 
 {
   if (Serial.available() > 0) 
   {
-    int number = Serial.parseInt();
+    number = Serial.parseInt();
     
     if (Serial.read() == '\n') 
     {
       Serial.print("Received Number: ");
       Serial.println(number);
-      eyeControl.TiltLeftEye(number);
-      
-    } else 
+
+      smooth = (number * 0.1) + (oldValue * 0.10);
+      oldValue = smooth;
+
+      Serial.println(smooth);
+      Serial.println(oldValue);
+
+      eyeControl.PanLeftEye(smooth);
+      eyeControl.PanRightEye(smooth);   
+    } 
+    else 
     {
       Serial.println("Error: Invalid input. Please enter a valid integer.");
     }
+
+      Serial.println(number);
   }
+
+  //uint16_t smoth = eyeControl.SmoothMotion(eyeControl.getLeftEyePanOldValue(), number);
+
+  
 }

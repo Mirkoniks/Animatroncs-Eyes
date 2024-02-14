@@ -1,15 +1,23 @@
-import serial
+import spidev
+import time
 
-# Serial setup
-ser = serial.Serial('/dev/ttyUSB0', 9600)  # Adjust the port ('/dev/ttyUSB0') to match your system
+# Open SPI bus
+spi = spidev.SpiDev()
+spi.open(0, 0)  # Check your SPI bus and device number
 
-# Assuming adjusted_x and adjusted_y are calculated in your image recognition logic
-adjusted_x = 42
-adjusted_y = 24
+# Set SPI mode and max speed
+spi.mode = 0  # Set SPI mode (0, 1, 2, or 3)
+spi.max_speed_hz = 1000000  # Set max speed in Hz
 
-# Send X and Y values through serial to Arduino Nano
-data_to_send = f"{adjusted_x},{adjusted_y}\n"
-ser.write(data_to_send.encode())
+try:
+    while True:
+        # Data to be sent (example)
+        data_out = [0xAA, 0xBB, 0xCC]  # You can adjust this data as needed
 
-# Close the serial connection when done
-ser.close()
+        # Send data
+        spi.xfer2(data_out)
+
+        time.sleep(1)  # Delay between sending data
+
+except KeyboardInterrupt:
+    spi.close()
