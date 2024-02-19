@@ -1,5 +1,5 @@
 import spidev
-import time
+import struct
 
 # Open SPI bus
 spi = spidev.SpiDev()
@@ -9,15 +9,13 @@ spi.open(0, 0)  # Check your SPI bus and device number
 spi.mode = 0  # Set SPI mode (0, 1, 2, or 3)
 spi.max_speed_hz = 1000000  # Set max speed in Hz
 
-try:
-    while True:
-        # Data to be sent (example)
-        data_out = [0xAA, 0xBB, 0xCC]  # You can adjust this data as needed
+# Sample dictionary
+data_to_send = {'key1': 1233, 'key2': 3434, 'key3': 4343}
 
-        # Send data
-        spi.xfer2(data_out)
+# Encode dictionary into byte stream
+byte_stream = bytes(str(data_to_send), 'utf-8')
 
-        time.sleep(1)  # Delay between sending data
+# Send data
+spi.writebytes(list(byte_stream))
 
-except KeyboardInterrupt:
-    spi.close()
+spi.close()

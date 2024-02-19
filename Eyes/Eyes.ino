@@ -12,14 +12,14 @@ ServoConfig config =
 };
 
 EyeControl eyeControl;
+SerialCommunication serialCommunication;
 
 int number;
 
 void setup() 
 {
   eyeControl.init(&config);
-  eyeControl.SetupServos();
-
+  serialCommunication.init();
   Serial.begin(9600); 
 }
 
@@ -28,33 +28,35 @@ int smooth = 1500;
 
 void loop() 
 {
-  if (Serial.available() > 0) 
-  {
-    number = Serial.parseInt();
+  // if (Serial.available() > 0) 
+  // {
+  //   number = Serial.parseInt();
     
-    if (Serial.read() == '\n') 
-    {
-      Serial.print("Received Number: ");
-      Serial.println(number);
+  //   if (Serial.read() == '\n') 
+  //   {
+  //     Serial.print("Received Number: ");
+  //     Serial.println(number);
 
-      smooth = (number * 0.1) + (oldValue * 0.10);
-      oldValue = smooth;
+  //     smooth = (number * 0.1) + (oldValue * 0.10);
+  //     oldValue = smooth;
 
-      Serial.println(smooth);
-      Serial.println(oldValue);
+  //     Serial.println(smooth);
+  //     Serial.println(oldValue);
 
-      eyeControl.PanLeftEye(smooth);
-      eyeControl.PanRightEye(smooth);   
-    } 
-    else 
-    {
-      Serial.println("Error: Invalid input. Please enter a valid integer.");
-    }
+  //     eyeControl.PanLeftEye(smooth);
+  //     eyeControl.PanRightEye(smooth);   
+  //   } 
+  //   else 
+  //   {
+  //     Serial.println("Error: Invalid input. Please enter a valid integer.");
+  //   }
 
-      Serial.println(number);
-  }
+  //     Serial.println(number);
+  // }
 
-  //uint16_t smoth = eyeControl.SmoothMotion(eyeControl.getLeftEyePanOldValue(), number);
+  //uint16_t smoth = eyeControl.SmoothMotion(eyeControl.getLeftEyePanOldValue(), number); 
 
-  
+  char* a = serialCommunication.ReceiveData();
+
+  Serial.println(a);
 }

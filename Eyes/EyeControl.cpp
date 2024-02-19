@@ -75,6 +75,8 @@ void EyeControl::init(ServoConfig* servoConfig)
   *rightEyeTiltOldValue = DEFAULT_VALUE;
   *rightEyePanOldValue = DEFAULT_VALUE;
   *eyelidsOpennessOldValue = DEFAULT_VALUE;
+
+  SetupServos();
 }
 
 void EyeControl::SetupServos()

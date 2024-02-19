@@ -4,7 +4,8 @@
 class SerialCommunication
 {
   public:
+    void init();
     void SetupCommunication();
     void SendData(byte data);
-    byte ReceiveData();
+    char* ReceiveData();
 };
