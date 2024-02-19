@@ -1,3 +1,6 @@
+#pragma once
+#include <Arduino.h>
+
 #define WRITE_DEFAULT_POSITON_ON_POWER_ON 0
 
 #define LEFT_EYE_TILT 3
@@ -38,4 +41,7 @@
 #define SMOOTHING_CONSTANT  0.5
 #define SMOOTHING_CONSTANT_OLD_VALUE 0.95
 
-const int DEFAULT_VALUE = 1500;
+#define RX_NANO A5
+#define TX_NANO A4
+
+const int DEFAULT_SERVO_VALUE = 1500;

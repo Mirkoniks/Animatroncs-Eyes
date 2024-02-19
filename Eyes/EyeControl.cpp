@@ -69,12 +69,12 @@ void EyeControl::setEyelidsOpennessOldValue(uint16_t value)
 void EyeControl::init(ServoConfig* servoConfig)
 {
   this->servoConfig = *servoConfig;
-  *eyelidsTiltOldValue = DEFAULT_VALUE;
-  *leftEyeTiltOldValue = DEFAULT_VALUE;
-  *leftEyePanOldValue = DEFAULT_VALUE;
-  *rightEyeTiltOldValue = DEFAULT_VALUE;
-  *rightEyePanOldValue = DEFAULT_VALUE;
-  *eyelidsOpennessOldValue = DEFAULT_VALUE;
+  *eyelidsTiltOldValue = DEFAULT_SERVO_VALUE;
+  *leftEyeTiltOldValue = DEFAULT_SERVO_VALUE;
+  *leftEyePanOldValue = DEFAULT_SERVO_VALUE;
+  *rightEyeTiltOldValue = DEFAULT_SERVO_VALUE;
+  *rightEyePanOldValue = DEFAULT_SERVO_VALUE;
+  *eyelidsOpennessOldValue = DEFAULT_SERVO_VALUE;
 
   SetupServos();
 }

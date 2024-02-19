@@ -1,11 +1,16 @@
 #pragma once
-#include <SPI.h>
+#include "Globals.h"
+#include <SoftwareSerial.h>
 
 class SerialCommunication
 {
+  private:
+    SoftwareSerial jetsonSoftwareSerial = SoftwareSerial(RX_NANO,TX_NANO);
+
   public:
+
     void init();
-    void SetupCommunication();
-    void SendData(byte data);
-    char* ReceiveData();
+
+    void SendData(String data);
+    String ReceiveData();
 };

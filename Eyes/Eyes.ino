@@ -1,5 +1,7 @@
 #include "EyeControl.h"
 #include "SerialCommunication.h"
+#include <SoftwareSerial.h> 
+#include <ArduinoJson.h>
 
 ServoConfig config = 
 {
@@ -12,15 +14,18 @@ ServoConfig config =
 };
 
 EyeControl eyeControl;
-SerialCommunication serialCommunication;
+SerialCommunication jetsonSerial;
+SoftwareSerial jSerial(A5,A4);
+StaticJsonDocument<1024> cmd;
 
 int number;
 
 void setup() 
 {
   eyeControl.init(&config);
-  serialCommunication.init();
-  Serial.begin(9600); 
+  jetsonSerial = SerialCommunication();
+  Serial.begin(9600);
+  jSerial.begin(9600);
 }
 
 int oldValue = 1500;
@@ -54,9 +59,25 @@ void loop()
   //     Serial.println(number);
   // }
 
-  //uint16_t smoth = eyeControl.SmoothMotion(eyeControl.getLeftEyePanOldValue(), number); 
+  // uint16_t smoth = eyeControl.SmoothMotion(eyeControl.getLeftEyePanOldValue(), number); 
 
-  char* a = serialCommunication.ReceiveData();
+ if (jSerial.available() > 0) 
+  {
+    String data = jSerial.readStringUntil('\n');
+    // Serial.print("Received: ");
+    // Serial.println(data);
 
-  Serial.println(a);
+    jSerial.println("Hello from Arduino Nano");
+
+    DeserializationError error = deserializeJson(cmd, data);
+
+    if (error) 
+    {
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.println(error.f_str());
+    }
+  }
+  String b = cmd["action"];
+
+  Serial.println(b);
 }
