@@ -1,6 +1,8 @@
 import cv2
 import dlib
 import threading
+import serial
+import json
 
 # Initialize dlib's face detector and facial landmark predictor
 detector = dlib.get_frontal_face_detector()
@@ -19,6 +21,15 @@ capture_height = 720  # Set your desired height
 cap = cv2.VideoCapture(0)
 cap.set(3, capture_width)  # Set the width
 cap.set(4, capture_height)  # Set the height
+
+
+#Opening serial connection
+serial_port = '/dev/ttyTHS1'  # Adjust the port based on your setup
+baud_rate = 9600
+# Open serial connection
+ser = serial.Serial(serial_port, baud_rate)
+
+
 
 # Function to capture frames
 def capture_frames():
@@ -58,6 +69,15 @@ def process_frames():
                 shared_adjusted_position = (adjusted_x, adjusted_y)
 
                 print(f"Adjusted Face Position: X={adjusted_x}, Y={adjusted_y}")
+
+                # Define the dictionary command
+                command = {'X': adjusted_x, 'Y': adjusted_y}  # Example command
+
+                # Serialize dictionary to JSON
+                command_json = json.dumps(command)
+
+                # Send JSON data to Arduino
+                ser.write(command_json.encode() + b'\n')
 
                 # Draw a rectangle around the detected face
                 cv2.rectangle(frame, (face.left(), face.top()), (face.right(), face.bottom()), (255, 0, 0), 2)
